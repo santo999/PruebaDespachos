@@ -1,0 +1,45 @@
+<div class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h2 class="card-title">Inventario</h2>
+
+    @if (store.repuestos.hasValue()) {
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Nombre</th>
+              <th class="text-right">Cantidad disponible</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (repuesto of store.repuestos.value(); track repuesto.id) {
+              <tr>
+                <td>{{ repuesto.sku }}</td>
+                <td>{{ repuesto.nombre }}</td>
+                <td class="text-right">
+                  <span
+                    class="badge"
+                    [class.badge-warning]="repuesto.cantidadDisponible < 10"
+                    [class.badge-ghost]="repuesto.cantidadDisponible >= 10"
+                  >
+                    {{ repuesto.cantidadDisponible }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else if (store.repuestos.error()) {
+      <div role="alert" class="alert alert-error">
+        <span>No se pudo cargar el inventario.</span>
+      </div>
+    } @else {
+      <div class="flex items-center gap-2 text-base-content/60">
+        <span class="loading loading-spinner"></span>
+        <span>Cargando inventario…</span>
+      </div>
+    }
+  </div>
+</div>

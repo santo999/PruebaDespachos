@@ -1,0 +1,41 @@
+<div class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h2 class="card-title">Historial de despachos</h2>
+
+    @if (store.historial.hasValue() && store.historial.value().length > 0) {
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>Referencia externa</th>
+              <th>Repuesto</th>
+              <th class="text-right">Cantidad</th>
+              <th>Fecha/hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (despacho of store.historial.value(); track despacho.id) {
+              <tr>
+                <td class="font-mono text-sm">{{ despacho.referenciaExterna }}</td>
+                <td>{{ despacho.repuestoSku }} — {{ despacho.repuestoNombre }}</td>
+                <td class="text-right">{{ despacho.cantidad }}</td>
+                <td>{{ despacho.fechaRegistro | date: 'short' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else if (store.historial.hasValue()) {
+      <p class="text-base-content/60">Todavía no hay despachos registrados.</p>
+    } @else if (store.historial.error()) {
+      <div role="alert" class="alert alert-error">
+        <span>No se pudo cargar el historial.</span>
+      </div>
+    } @else {
+      <div class="flex items-center gap-2 text-base-content/60">
+        <span class="loading loading-spinner"></span>
+        <span>Cargando historial…</span>
+      </div>
+    }
+  </div>
+</div>
