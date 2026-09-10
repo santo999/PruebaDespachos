@@ -1,0 +1,58 @@
+<div class="card bg-base-100 shadow">
+  <div class="card-body">
+    <h2 class="card-title">Registrar despacho</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Referencia externa de la orden</legend>
+        <input
+          id="referenciaExterna"
+          type="text"
+          class="input w-full"
+          placeholder="REF-123456"
+          formControlName="referenciaExterna"
+        />
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Repuesto</legend>
+        <select id="repuestoId" class="select w-full" formControlName="repuestoId">
+          <option value="" disabled>Selecciona un repuesto…</option>
+          @if (store.repuestos.hasValue()) {
+            @for (repuesto of store.repuestos.value(); track repuesto.id) {
+              <option [value]="repuesto.id">
+                {{ repuesto.sku }} — {{ repuesto.nombre }} (disponible:
+                {{ repuesto.cantidadDisponible }})
+              </option>
+            }
+          }
+        </select>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Cantidad</legend>
+        <input
+          id="cantidad"
+          type="number"
+          min="1"
+          step="1"
+          class="input w-full"
+          formControlName="cantidad"
+        />
+      </fieldset>
+
+      <button type="submit" class="btn btn-primary mt-2" [disabled]="form.invalid || enviando()">
+        @if (enviando()) {
+          <span class="loading loading-spinner loading-sm"></span>
+          Registrando…
+        } @else {
+          Registrar despacho
+        }
+      </button>
+    </form>
+
+    @if (resultado(); as res) {
+      <app-alert-message [tipo]="res.tipo" [mensaje]="res.mensaje" />
+    }
+  </div>
+</div>
