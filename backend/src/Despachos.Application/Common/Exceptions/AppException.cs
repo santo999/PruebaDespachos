@@ -31,14 +31,14 @@ public sealed class CantidadInvalidaException : AppException
 
 public sealed class StockInsuficienteException : AppException
 {
-    public Guid RepuestoId { get; }
+    public String RepuestoId { get; }
     public int CantidadSolicitada { get; }
     public int CantidadDisponible { get; }
 
-    public StockInsuficienteException(Guid repuestoId, int cantidadSolicitada, int cantidadDisponible)
-        : base($"Stock insuficiente para el repuesto {repuestoId}: solicitado {cantidadSolicitada}, disponible {cantidadDisponible}.")
+    public StockInsuficienteException(String nombreRepuesto, int cantidadSolicitada, int cantidadDisponible)
+        : base($"Stock insuficiente para el repuesto {nombreRepuesto}: solicitado {cantidadSolicitada}, disponible {cantidadDisponible}.")
     {
-        RepuestoId = repuestoId;
+        RepuestoId = nombreRepuesto;
         CantidadSolicitada = cantidadSolicitada;
         CantidadDisponible = cantidadDisponible;
     }

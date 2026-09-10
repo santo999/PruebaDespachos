@@ -49,13 +49,13 @@ public sealed class DespachoService(
                 logger.LogInformation(
                     "Despacho rechazado: stock insuficiente para repuesto {RepuestoId} (solicitado {Cantidad}, disponible {Disponible})",
                     request.RepuestoId, request.Cantidad, repuesto.CantidadDisponible);
-                throw new StockInsuficienteException(request.RepuestoId, request.Cantidad, repuesto.CantidadDisponible);
+                throw new StockInsuficienteException(repuesto.Nombre, request.Cantidad, repuesto.CantidadDisponible);
         }
 
 
         logger.LogInformation(
             "Despacho {DespachoId} registrado (referencia {Referencia}, repuesto {RepuestoId}, cantidad {Cantidad})",
-            despacho.Id, despacho.ReferenciaExterna, despacho.RepuestoId, despacho.Cantidad);
+            despacho.Id, despacho.ReferenciaExterna, repuesto.Id, despacho.Cantidad);
 
         return new DespachoDto(
             despacho.Id, despacho.ReferenciaExterna, repuesto.Id, repuesto.Sku, repuesto.Nombre,
@@ -63,5 +63,8 @@ public sealed class DespachoService(
     }
 
     public Task<IReadOnlyList<DespachoDto>> ConsultarHistorialAsync(CancellationToken ct = default)
-        => despachoRepository.ObtenerHistorialAsync(ct);
+    {
+        return despachoRepository.ObtenerHistorialAsync(ct);
+    }
+
 }
