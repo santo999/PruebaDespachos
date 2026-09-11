@@ -5,4 +5,7 @@
     <Project Path="src/Despachos.Domain/Despachos.Domain.csproj" />
     <Project Path="src/Despachos.Infrastructure/Despachos.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Despachos.Api.Tests/Despachos.Api.Tests.csproj" />
+  </Folder>
 </Solution>
