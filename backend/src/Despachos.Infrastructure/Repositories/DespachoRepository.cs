@@ -4,6 +4,7 @@ using Despachos.Application.Abstractions;
 using Despachos.Application.Despachos;
 using Despachos.Domain.Entities;
 using Despachos.Infrastructure.Persistence;
+using Microsoft.Data.SqlClient;
 
 namespace Despachos.Infrastructure.Repositories;
 
@@ -20,7 +21,7 @@ public class DespachoRepository(AppDbContext context, ILogger<DespachoRepository
             await context.SaveChangesAsync(ct);
         }
 
-        catch (DbUpdateException ex)
+        catch (DbUpdateException ex) when (EsViolacionDeUnicidad(ex))
         {
             await transaction.RollbackAsync(ct);
             logger.LogWarning(ex,
@@ -55,5 +56,9 @@ public class DespachoRepository(AppDbContext context, ILogger<DespachoRepository
                 d.Repuesto!.Sku, d.Repuesto.Nombre, d.Cantidad, d.FechaRegistro))
             .ToListAsync(ct);
     }
+
+    private static bool EsViolacionDeUnicidad(DbUpdateException ex) =>
+        ex.InnerException is SqlException sqlEx && (sqlEx.Number == 2601 || sqlEx.Number == 2627);
+
 
 }
